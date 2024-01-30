@@ -32,7 +32,11 @@ def plot_car(metadata_line, input_img):
             colour_white = (int(255), int(255), int(255))
             colour_red = (int(0), int(0), int(255))
             point_colour = colour_white if vis == 2 else colour_red
-            cv2.circle(input_img, (int(x*img_width), int(y*img_height)), 5, point_colour, -1)
+            area = width*height
+            point_size = int(area/500)
+            point_size = 2 if point_size<2 else (5 if point_size>5 else point_size)
+
+            cv2.circle(input_img, (int(x*img_width), int(y*img_height)), point_size, point_colour, -1)
 
 def plot_all_metadata(img_num):
     img = cv2.imread(f'{img_num}.jpg')
