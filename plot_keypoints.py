@@ -36,7 +36,10 @@ keypoints_groups = [keypoints[i:i+3] for i in range(0, len(keypoints), 3)]
 
 for group in keypoints_groups:
     x,y,vis = group
-    cv2.circle(img, (int(x*img_width), int(y*img_height)), 5, (int(255), int(255), int(255)), -1)
+    colour_white = (int(255), int(255), int(255))
+    colour_red = (int(0), int(0), int(255))
+    point_colour = colour_white if vis == 2 else colour_red
+    cv2.circle(img, (int(x*img_width), int(y*img_height)), 5, point_colour, -1)
 
 cv2.imshow("Bounding Box", img)
 cv2.waitKey(0)
