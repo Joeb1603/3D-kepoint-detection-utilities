@@ -11,39 +11,46 @@ def yolo_to_cv2_box(yolo_values, img_width, img_height):
     
     return x, y, width, height
 
-img = cv2.imread('11.jpg')
+def plot_car(metadata_line, input_img):
+        metadata_list = metadata_line.split()
+        metadata_list = [float(item) for item in metadata_list]
 
-with open('11.txt') as f:
-    metadata_file = f.readlines()
+        b_box = metadata_list[:5]
 
-metadata = metadata_file[2]
+        keypoints = metadata_list[5:]
 
-metadata_list = metadata.split()
-metadata_list = [float(item) for item in metadata_list]
+        img_width =  input_img.shape[1]
+        img_height = input_img.shape[0]
 
-b_box = metadata_list[:5]
+        x, y, width, height = yolo_to_cv2_box(b_box, img_width, img_height)
+        cv2.rectangle(input_img, (x, y), (x + width, y + height), (0, 255, 0), 2)
 
-keypoints = metadata_list[5:]
+        keypoints_groups = [keypoints[i:i+3] for i in range(0, len(keypoints), 3)]
 
-img_width =  img.shape[1]
-img_height = img.shape[0]
+        for group in keypoints_groups:
+            x,y,vis = group
+            colour_white = (int(255), int(255), int(255))
+            colour_red = (int(0), int(0), int(255))
+            point_colour = colour_white if vis == 2 else colour_red
+            cv2.circle(input_img, (int(x*img_width), int(y*img_height)), 5, point_colour, -1)
 
-x, y, width, height = yolo_to_cv2_box(b_box, img_width, img_height)
-cv2.rectangle(img, (x, y), (x + width, y + height), (0, 255, 0), 2)
+def plot_all_metadata(img_num):
+    img = cv2.imread(f'{img_num}.jpg')
 
-keypoints_groups = [keypoints[i:i+3] for i in range(0, len(keypoints), 3)]
+    with open(f'{img_num}.txt') as f:
+        metadata_file = f.readlines()
+
+    for file in metadata_file:
+        plot_car(file, img)
+        
+    cv2.imshow("Bounding Box", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
-for group in keypoints_groups:
-    x,y,vis = group
-    colour_white = (int(255), int(255), int(255))
-    colour_red = (int(0), int(0), int(255))
-    point_colour = colour_white if vis == 2 else colour_red
-    cv2.circle(img, (int(x*img_width), int(y*img_height)), 5, point_colour, -1)
+current_img = "11"
+plot_all_metadata(current_img)
 
-cv2.imshow("Bounding Box", img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
 
 
 
