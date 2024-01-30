@@ -1,2 +1,4 @@
-*s
+*
 !gitignore
+!requirements.txt
+!plot_keypoints.py
