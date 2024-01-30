@@ -27,6 +27,8 @@ def plot_car(metadata_line, input_img):
 
         keypoints_groups = [keypoints[i:i+3] for i in range(0, len(keypoints), 3)]
 
+        last_coords = None
+        all_coords = []
         for group in keypoints_groups:
             x,y,vis = group
             colour_white = (int(255), int(255), int(255))
@@ -35,8 +37,34 @@ def plot_car(metadata_line, input_img):
             area = width*height
             point_size = int(area/500)
             point_size = 2 if point_size<2 else (5 if point_size>5 else point_size)
+            new_x = int(x*img_width)
+            new_y = int(y*img_height)
+            current_points = (new_x, new_y)
+            cv2.circle(input_img, current_points, point_size, point_colour, -1)
+            all_coords.append(current_points)
+            '''if last_coords is not None:
+                print(f"{last_coords} to {(new_x,new_y)}")
+                cv2.line(input_img, last_coords, (new_x,new_y), colour_red, 1)
+            last_coords = current_points'''
+        
+        #bottom rectangle
+        cv2.line(input_img, all_coords[0], all_coords[1], colour_red, 1)
+        cv2.line(input_img, all_coords[1], all_coords[2], colour_red, 1)
+        cv2.line(input_img, all_coords[2], all_coords[3], colour_red, 1)
+        cv2.line(input_img, all_coords[3], all_coords[0], colour_red, 1)
 
-            cv2.circle(input_img, (int(x*img_width), int(y*img_height)), point_size, point_colour, -1)
+        # Top rectangle
+        cv2.line(input_img, all_coords[4], all_coords[5], colour_red, 1)
+        cv2.line(input_img, all_coords[5], all_coords[6], colour_red, 1)
+        cv2.line(input_img, all_coords[6], all_coords[7], colour_red, 1)
+        cv2.line(input_img, all_coords[7], all_coords[4], colour_red, 1)
+
+        # Bottom to top connection 
+        cv2.line(input_img, all_coords[0], all_coords[4], colour_red, 1)
+        cv2.line(input_img, all_coords[1], all_coords[5], colour_red, 1)
+        cv2.line(input_img, all_coords[2], all_coords[6], colour_red, 1)
+        cv2.line(input_img, all_coords[3], all_coords[7], colour_red, 1)
+
 
 def plot_all_metadata(img_num):
     img = cv2.imread(f'{img_num}.jpg')
