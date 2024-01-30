@@ -40,10 +40,35 @@ def plot_car(metadata_line, input_img):
             22: 'Open Wheel',
         }
 
+        rgb_values = [
+            (255, 0, 0),   # Red
+            (0, 255, 0),   # Green
+            (0, 0, 255),   # Blue
+            (255, 255, 0), # Yellow
+            (255, 0, 255), # Magenta
+            (0, 255, 255), # Cyan
+            (128, 0, 0),   # Maroon
+            (0, 128, 0),   # Green (Dark)
+            (0, 0, 128),   # Navy
+            (128, 128, 0), # Olive
+            (128, 0, 128), # Purple
+            (0, 128, 128), # Teal
+            (255, 165, 0), # Orange
+            (128, 128, 128), # Gray
+            (255, 255, 255), # White
+            (0, 0, 0),       # Black
+            (192, 192, 192),  # Silver
+            (255, 99, 71),    # Tomato
+            (0, 128, 128),    # Dark Cyan
+            (75, 0, 130),     # Indigo
+            (255, 182, 193),  # Light Pink
+        ]   
+
         colour_white = (int(255), int(255), int(255))
         colour_red = (int(0), int(0), int(255))
         colour_green = (0, 255, 0)
         colour_random = [random.randint(0, 255) for _ in range(3)]
+        colour_veh_class = rgb_values[int(metadata_line[0])] 
 
         metadata_list = metadata_line.split()
         metadata_list = [float(item) for item in metadata_list]
@@ -56,7 +81,7 @@ def plot_car(metadata_line, input_img):
         img_height = input_img.shape[0]
         
         x, y, width, height = yolo_to_cv2_box(b_box, img_width, img_height)
-        cv2.rectangle(input_img, (x, y), (x + width, y + height), colour_random, 2)
+        cv2.rectangle(input_img, (x, y), (x + width, y + height), colour_veh_class, 2)
         
         area = width*height
 
@@ -65,7 +90,7 @@ def plot_car(metadata_line, input_img):
             label = f"{vehicle_types[int(b_box[0])]}"
             line_thickness = 1
             tl = line_thickness or round(0.002 * (input_img.shape[0] + input_img.shape[1]) / 2) + 1  # line/font thickness
-            color = colour_random
+            color = colour_veh_class
             c1, c2 = ((x, y), (x + width, y + height))
             tf = max(tl - 1, 1)  # font thickness
             t_size = cv2.getTextSize(label, 0, fontScale=tl / 3, thickness=tf)[0]
@@ -106,7 +131,6 @@ def plot_car(metadata_line, input_img):
         cv2.line(input_img, all_coords[2], all_coords[6], colour_red, 1)
         cv2.line(input_img, all_coords[3], all_coords[7], colour_red, 1)
 
-
 def plot_all_metadata(img_num):
     img = cv2.imread(f'{img_num}.jpg')
 
@@ -121,7 +145,6 @@ def plot_all_metadata(img_num):
     cv2.destroyAllWindows()
 
     cv2.imwrite("output.jpg", img)
-
 
 current_img = "11"
 plot_all_metadata(current_img)
