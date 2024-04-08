@@ -63,6 +63,31 @@ def plot_car(metadata_line, input_img):
             (75, 0, 130),     # Indigo
             (255, 182, 193),  # Light Pink
         ]   
+        rgb_values = [
+            (255, 0, 0),     # Red
+            (0, 255, 0),     # Green
+            (0, 0, 255),     # Blue
+            (255, 255, 0),   # Yellow
+            (255, 0, 255),   # Magenta
+            (0, 255, 255),   # Cyan
+            (128, 0, 0),     # Maroon
+            (0, 128, 0),     # Green (Dark)
+            (0, 0, 128),     # Navy
+            (128, 128, 0),   # Olive
+            (128, 0, 128),   # Purple
+            (0, 128, 128),   # Teal
+            (255, 165, 0),   # Orange
+            (128, 128, 128), # Gray
+            (255, 255, 255), # White
+            (0, 0, 0),       # Black
+            (192, 192, 192),  # Silver
+            (255, 99, 71),    # Tomato
+            (0, 128, 128),    # Dark Cyan
+            (75, 0, 130),     # Indigo
+            (255, 182, 193),  # Light Pink
+            (70, 130, 180),   # Steel Blue
+            (255, 215, 0),    # Gold
+        ]
 
         colour_white = (int(255), int(255), int(255))
         colour_red = (int(0), int(0), int(255))
@@ -146,7 +171,7 @@ def plot_all_metadata(img_num):
 
     cv2.imwrite("output.jpg", img)
 
-current_img = "11"
+current_img = "38"
 plot_all_metadata(current_img)
 
 
