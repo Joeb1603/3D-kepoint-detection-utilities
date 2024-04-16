@@ -1,5 +1,7 @@
 import cv2
 import random
+import os
+from tqdm import tqdm
 
 def yolo_to_cv2_box(yolo_values, img_width, img_height):
     _, center_x, center_y, box_width, box_height = yolo_values
@@ -110,7 +112,7 @@ def plot_car(metadata_line, input_img):
         
         area = width*height
 
-        print(area)
+        #print(area)
         if area >1000:
             label = f"{vehicle_types[int(b_box[0])]}"
             line_thickness = 1
@@ -162,8 +164,8 @@ def plot_all_metadata(img_num):
     with open(f'{img_num}.txt') as f:
         metadata_file = f.readlines()
 
-    for file in metadata_file:
-        plot_car(file, img)
+    for line in metadata_file:
+        plot_car(line, img)
         
     cv2.imshow("Bounding Box", img)
     cv2.waitKey(0)
@@ -171,8 +173,35 @@ def plot_all_metadata(img_num):
 
     cv2.imwrite("output.jpg", img)
 
-current_img = "38"
-plot_all_metadata(current_img)
+def plot_folder():
+     
+     target_folder = 'F:\Programming\Dissertation-mk2\dataset'
+     os.makedirs(os.path.join(target_folder, 'annotated_images'), exist_ok=True)
+     image_dir = os.path.join(target_folder, "images")
+     label_dir = os.path.join(target_folder, "labels")
+
+     for file in tqdm(os.listdir(image_dir)):
+        current_item = file.split('.')[0]
+        current_image = os.path.join(image_dir,current_item+'.jpg')
+        current_label = os.path.join(label_dir,current_item+'.txt')
+
+        img = cv2.imread(current_image)
+
+        with open(current_label) as f:
+            metadata_file = f.readlines()
+
+        for line in metadata_file:
+            plot_car(line, img)
+
+        cv2.imwrite(os.path.join(target_folder, 'annotated_images', current_item+'.jpg'), img)
+          
+
+
+plot_folder()
+
+#current_img = "38"
+#plot_all_metadata(current_img)
+    
 
 
 
