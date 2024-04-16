@@ -1,9 +1,12 @@
+import ultralytics
 from ultralytics import YOLO
 
 
 
 if __name__ == '__main__':
 
+
+    file_path = ultralytics.utils.downloads.attempt_download_asset('yolov8n-pose.pt', repo='ultralytics/assets', release='latest')
     # Load a model
     model = YOLO('yolov8n-pose.pt')  # load a pretrained model (recommended for training)
 
